@@ -1,0 +1,62 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "trpc-mysql"
+dynamic = ["version"]
+description = "MySQL client for the tRPC-Python framework"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+authors = [{ name = "tRPC Group" }]
+keywords = ["trpc", "mysql", "python"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "trpc-python; sys_platform != 'win32'",
+    "aiomysql~=0.0.21",
+    "pymysql~=0.9.3",
+    "cryptography",
+    "aiocron",
+    "netifaces",
+    "six",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-html",
+    "pytest-cov",
+    "pytest-asyncio",
+    "pytest-mock",
+]
+
+[tool.hatch.version]
+path = "trpc_mysql/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["trpc_mysql"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "trpc_mysql",
+    "tests",
+    "README.md",
+    "CHANGELOG.md",
+]
+
+# uv project configuration. `uv sync` installs this package as editable.
+[tool.uv]
+package = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

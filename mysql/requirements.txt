@@ -1,0 +1,9 @@
+trpc-python
+aiomysql~=0.0.21
+pymysql~=0.9.3
+# PyMySQL 0.9.3 needs this for MySQL 8 caching_sha2_password.
+cryptography
+# Imported by the installed trpc-python tree, but not declared on that wheel.
+aiocron
+netifaces
+six

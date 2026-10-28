@@ -1,0 +1,63 @@
+# Tencent is pleased to support the open source community by making tRPC-Python-Database available.
+#
+# Copyright (C) 2026 Tencent. All rights reserved.
+#
+# tRPC-Python-Database is licensed under Apache-2.0.
+
+# Example config: merge mode, one process with two serving threads, each running its own event loop.
+global:                             # Global configuration.
+  namespace: Development            # Environment type: production or development.
+  env_name: test                    # Environment name used when namespace is not production.
+  container_name:                   # Container name.
+  local_ip:                         # Host IP.
+  processmodel:                     # Process and thread model.
+    mode: single_process            # single_process or multi_process.
+    handle_num: 2                   # Handler threads (single_process) or processes (multi_process).
+
+server:                                            # Server configuration.
+  app: trpc-python                                 # Application name.
+  server: trpc-kafka                               # Process service name.
+  close_wait_time: 1000                            # Drain time after SIGTERM, in milliseconds.
+  bin_path: /usr/local/trpc/bin/                   # Directory of the binary and framework config.
+  conf_path: /usr/local/trpc/conf/                 # Directory of business config files.
+  data_path: /usr/local/trpc/data/                 # Directory of business data files.
+  service:                                         # Services exposed by this process. More than one is allowed.
+    - name: trpc.trpc-python.trpc-kafka.consume    # Service route name.
+      ip: 127.0.0.1                                # Not listened on: Kafka consumers connect to the brokers instead.
+      port: 8000
+      # Brokers, then the consumer options. Every serving loop runs one consumer in this group.
+      target: localhost:9092?topics=test-topic&group=test_consumers&enable_auto_commit=true&session_timeout_ms=20000&check_crcs=False
+      network: tcp
+      protocol: kafka                              # Served by the trpc_kafka consumers.
+      timeout: 1000                                # Maximum request handling time, in milliseconds.
+    - name: trpc.trpc_python_group.helloworld.Greeter  # Greeter, whose SayHello produces to Kafka.
+      ip: 127.0.0.1                                # Listen address. ${ip} is allowed. ip wins over nic when both are set.
+      port: 8001                                   # Listen port. ${port} is allowed.
+      network: tcp                                 # Transport: tcp or udp.
+      protocol: trpc                               # Application protocol: trpc or http.
+      timeout: 5000                                # Maximum request handling time, in milliseconds.
+
+client:                                            # Backends this process calls.
+  timeout: 1000                                    # Default maximum handling time for every backend.
+  namespace: Development                           # Default environment for every backend.
+  service:                                         # Per-backend settings.
+    - name: trpc.kafka.producer.service            # Backend service name.
+      network: tcp                                 # Backend transport: tcp or udp. This value wins over the default.
+      target: ip://localhost:9092?linger_ms=5
+      protocol: kafka                              # Application protocol: trpc or http.
+      timeout: 5000                                # Maximum request handling time.
+
+plugins:                                          # Plugin configuration.
+  log:                                            # Logging configuration.
+    default:                                      # Default logger. More than one writer is allowed.
+      - writer: console                           # Console writer. This is the default.
+        level: info                               # Console log level.
+      - writer: file                              # Local file writer.
+        level: info                               # Rolling file log level.
+        formatter: json                           # Log format.
+        writer_config:
+          filename: ./trpc_merge_threads.log                   # Path of the rolling log file.
+          max_size: 10                            # Maximum size of one log file, in MB.
+          max_backups: 10                         # Maximum number of retained log files.
+          max_age: 7                              # Maximum age of a retained log file, in days.
+          compress: false                         # Whether retained log files are compressed.

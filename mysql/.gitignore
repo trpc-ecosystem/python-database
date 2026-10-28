@@ -1,0 +1,26 @@
+# project
+.idea
+.DS_Store
+
+#
+.pytest_cache
+
+# build
+build
+dist
+*.egg-info
+__pycache__
+*.pyc
+*.log
+
+#
+htmlcov
+cov.tmp
+.coverage
+
+#
+.noxenv
+.__py_trpc_*
+
+venv
+.venv

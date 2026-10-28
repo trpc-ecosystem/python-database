@@ -1,0 +1,57 @@
+# Tencent is pleased to support the open source community by making tRPC-Python-Database available.
+#
+# Copyright (C) 2026 Tencent. All rights reserved.
+#
+# tRPC-Python-Database is licensed under Apache-2.0.
+
+# Example config: merge mode, one I/O thread hands requests to two handler threads.
+global:                             # Global configuration.
+  namespace: Development            # Environment type: production or development.
+  env_name: test                    # Environment name used when namespace is not production.
+  container_name:                   # Container name.
+  local_ip:                         # Host IP.
+  processmodel:                     # Process and thread model.
+    mode: single_process            # single_process or multi_process.
+    io_handle_type: separate        # merge, separate, or (multi_process only) peer.
+    io_num: 1                       # I/O threads.
+    handle_num: 2                   # Handler threads (single_process) or processes (multi_process).
+
+server:                                            # Server configuration.
+  app: test                                        # Application name.
+  server: Greeter                                  # Process service name.
+  bin_path: /usr/local/trpc/bin/                   # Directory of the binary and framework config.
+  conf_path: /usr/local/trpc/conf/                 # Directory of business config files.
+  data_path: /usr/local/trpc/data/                 # Directory of business data files.
+  service:                                         # Services exposed by this process. More than one is allowed.
+    - name: trpc.trpc_python_group.helloworld.Greeter  # Service route name.
+      ip: 127.0.0.1                                # Listen address. ${ip} is allowed. ip wins over nic when both are set.
+      port: 8000                                   # Listen port. ${port} is allowed.
+      network: tcp                                 # Transport: tcp or udp.
+      protocol: trpc                               # Application protocol: trpc or http.
+      timeout: 5000                                # Maximum request handling time, in milliseconds.
+
+client:                                            # Backends this process calls.
+  timeout: 1000                                    # Default maximum handling time for every backend.
+  namespace: Development                           # Default environment for every backend.
+  service:                                         # Per-backend settings.
+    - name: trpc.redis.test_example                # Backend service name.
+      target: ip://127.0.0.1:6379
+      timeout: 5000                                # Maximum request handling time.
+      # password: ${redis_password}                # Uncomment when the Redis server requires AUTH.
+      redis:                                       # Extra redis.asyncio.ConnectionPool keyword arguments.
+        db: 0
+
+plugins:                                          # Plugin configuration.
+  log:                                            # Logging configuration.
+    default:                                      # Default logger. More than one writer is allowed.
+      - writer: console                           # Console writer. This is the default.
+        level: info                               # Console log level.
+      - writer: file                              # Local file writer.
+        level: info                               # Rolling file log level.
+        formatter: json                           # Log format.
+        writer_config:
+          filename: ./trpc_separate_thread.log                    # Path of the rolling log file.
+          max_size: 10                            # Maximum size of one log file, in MB.
+          max_backups: 10                         # Maximum number of retained log files.
+          max_age: 7                              # Maximum age of a retained log file, in days.
+          compress: false                         # Whether retained log files are compressed.
