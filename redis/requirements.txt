@@ -1,0 +1,6 @@
+wheel
+setuptools
+
+redis>=6.2.0
+
+# trpc-python ; sys_platform != 'win32'

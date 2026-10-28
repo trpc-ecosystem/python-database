@@ -1,0 +1,54 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "trpc-kafka"
+dynamic = ["version"]
+description = "Kafka client and consumers for the tRPC-Python framework"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+authors = [{ name = "tRPC Group" }]
+keywords = ["trpc", "kafka", "python"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "trpc-python; sys_platform != 'win32'",
+    "aiokafka",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+]
+
+[tool.hatch.version]
+path = "trpc_kafka/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["trpc_kafka"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "trpc_kafka",
+    "tests",
+    "README.md",
+    "README.zh_CN.md",
+]
+
+# uv project configuration. `uv sync` installs this package as editable.
+[tool.uv]
+package = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

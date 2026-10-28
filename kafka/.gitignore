@@ -1,0 +1,12 @@
+*.log
+*.lock
+build/
+dist/
+eggs/
+.eggs/
+*.egg-info/
+*.c
+htmlcov/
+.coverage
+/venv/
+/ft_local
