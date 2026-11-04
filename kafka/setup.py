@@ -12,22 +12,22 @@ from setuptools import setup, find_packages
 
 
 def read_version():
-    """Read ``__version__`` from the package init module.
+    """Read ``__version__`` from the package version module.
 
     Returns:
-        Version string declared in ``trpc_kafka/__init__.py``.
+        Version string declared in ``trpc_kafka/version.py``.
 
     Raises:
         RuntimeError: The version assignment is missing or not a supported form.
     """
     regexp = re.compile(r"^__version__\W*=\W*'(\d\.\d\.\d(-(alpha|beta|rc)\.\d)?)'")
-    init_py = os.path.join(os.path.dirname(__file__), "trpc_kafka", "__init__.py")
-    with open(init_py) as file:
+    version_py = os.path.join(os.path.dirname(__file__), "trpc_kafka", "version.py")
+    with open(version_py) as file:
         for line in file:
             match = regexp.match(line)
             if match is not None:
                 return match.group(1)
-        raise RuntimeError("Cannot find version in {}".format(init_py))
+        raise RuntimeError("Cannot find version in {}".format(version_py))
 
 
 setup(

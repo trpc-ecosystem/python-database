@@ -34,8 +34,7 @@ from .types import Request
 from .types import TrpcKafkaMessage
 from .utils import create_rsp_object
 from .utils import get_options
-
-__version__ = '0.1.0'
+from .version import __version__
 
 __all__ = [
     'Request',

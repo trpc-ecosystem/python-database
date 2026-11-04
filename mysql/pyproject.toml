@@ -41,7 +41,7 @@ dev = [
 ]
 
 [tool.hatch.version]
-path = "trpc_mysql/__init__.py"
+path = "trpc_mysql/version.py"
 
 [tool.hatch.build.targets.wheel]
 packages = ["trpc_mysql"]

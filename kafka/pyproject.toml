@@ -33,7 +33,7 @@ dev = [
 ]
 
 [tool.hatch.version]
-path = "trpc_kafka/__init__.py"
+path = "trpc_kafka/version.py"
 
 [tool.hatch.build.targets.wheel]
 packages = ["trpc_kafka"]
