@@ -18,9 +18,7 @@ from .transport import MysqlClientTransport
 from .types import DatabaseUrl
 from .types import Request
 from .types import Response
-
-# Read by hatchling from pyproject.toml. Not a runtime feature flag.
-__version__ = '0.1.0'
+from .version import __version__
 
 __all__ = [
     "MYSQL_NAME",

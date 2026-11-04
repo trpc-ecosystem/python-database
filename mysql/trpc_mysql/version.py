@@ -1,0 +1,11 @@
+# Tencent is pleased to support the open source community by making tRPC-Python-Database available.
+#
+# Copyright (C) 2026 Tencent. All rights reserved.
+#
+# tRPC-Python-Database is licensed under Apache-2.0.
+"""Package version for trpc-mysql.
+
+Read by hatchling from pyproject.toml. Not a runtime feature flag.
+"""
+
+__version__ = '1.0.0'
